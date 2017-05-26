@@ -16,6 +16,13 @@ IfEqualValue=1
 IfEqualAction=[!SetOption MeterTrack W "((#BarWidth#+#BarGap#)*(#BarCount#)*#ScaleVisualizer#)-[MeterArtist:W]"]
 UpdateDivider=-1
 
+[MeasureAddTextBorder]
+Measure=Calc
+Formula=#AddTextBorder#
+IfEqualValue=1
+IfEqualAction=[!SetOption MeterArtist StringEffect "Border"][!SetOption MeterTrack StringEffect "Border"]
+UpdateDivider=-1
+
 [MeasureSetMediaPlayer]
 Measure=String
 String=#PlayerName#
