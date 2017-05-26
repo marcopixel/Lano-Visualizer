@@ -42,12 +42,26 @@ Plugin=Chameleon
 Type=File
 Path=[MeasureCover]
 
+[ChameleonGetDesktopColor]
+Measure=Plugin
+Plugin=Chameleon
+Type=Desktop
+
 [MeasureCoverColor]
 Measure=Plugin
 Plugin=Chameleon
 Parent=MeasureGetCoverColor
 Format=Dec
 Color=Background1
+Substitute="":"#Color#"
+OnChangeAction=[!UpdateMeasure "CalcColors"]
+
+[MeasureDesktopColor]
+Measure=Plugin
+Plugin=Chameleon
+Parent=ChameleonGetDesktopColor
+Format=Dec
+Color=Foreground1
 Substitute="":"#Color#"
 OnChangeAction=[!UpdateMeasure "CalcColors"]
 
@@ -58,8 +72,12 @@ IfCondition= (#EnableDynamicColors# = 0) && (#DisableDynamicFontColors# = 1)
 IfTrueAction=[!SetVariable Color "[MeasureStaticColor]"]
 IfCondition2= (#EnableDynamicColors# = 1) && (#DisableDynamicFontColors# = 1)
 IfTrueAction2=[!SetVariable Color "[MeasureCoverColor]"]
-IfCondition3= (#EnableDynamicColors# = 0) && (#DisableDynamicFontColors# = 0)
-IfTrueAction3=[!SetVariable Color "[MeasureStaticColor]"][!SetVariable TextColor "[MeasureStaticColor]"]
-IfCondition4= (#EnableDynamicColors# = 1) && (#DisableDynamicFontColors# = 0)
-IfTrueAction4=[!SetVariable Color "[MeasureCoverColor]"][!SetVariable TextColor "[MeasureCoverColor]"]
+IfCondition3= (#EnableDynamicColors# = 2) && (#DisableDynamicFontColors# = 1)
+IfTrueAction3=[!SetVariable Color "[MeasureDesktopColor]"]
+IfCondition4= (#EnableDynamicColors# = 0) && (#DisableDynamicFontColors# = 0)
+IfTrueAction4=[!SetVariable Color "[MeasureStaticColor]"][!SetVariable TextColor "[MeasureStaticColor]"]
+IfCondition5= (#EnableDynamicColors# = 1) && (#DisableDynamicFontColors# = 0)
+IfTrueAction5=[!SetVariable Color "[MeasureCoverColor]"][!SetVariable TextColor "[MeasureCoverColor]"]
+IfCondition6= (#EnableDynamicColors# = 2) && (#DisableDynamicFontColors# = 0)
+IfTrueAction6=[!SetVariable Color "[MeasureDesktopColor]"][!SetVariable TextColor "[MeasureDesktopColor]"]
 UpdateDivider=-1
