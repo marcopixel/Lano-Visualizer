@@ -1,49 +1,59 @@
--- @author Malody Hoe / GitHub: madhoe / Twitter: maddhoexD
--- Structure of Script Measure:
----- IncFile=
----- Number=
----- SectionName=
----- OptionN=
----- ValueN=
----- where N is an ordered number from 0
--- Use %% to substitute it as the iteration number (which is specified by the Number option)
----- For example, if you specify 10, it will create 10 sections and replace the first section's %%
----- with 0, the second section's %% with 1, etc...
--- Wrap any formulas you want to parse in {} that otherwise RM would treat as a string
----- For example, [Measure{%%+1}] will have this script parse it for you
-
 function Initialize()
-	local num = SELF:GetNumberOption("Number")
-	local sectionName = SELF:GetOption("SectionName")
+	local meterFile = io.open(SKIN:GetVariable('@')..'include\\MeterBars.inc','w')
+	local barCount = tonumber(SKIN:GetVariable('BarCount'))
+	local height = tonumber(SKIN:GetVariable('BarHeight'))
+	local width = tonumber(SKIN:GetVariable('BarWidth'))
+	local gap = tonumber(SKIN:GetVariable('BarGap'))
+	local realWidth = width + gap
+	local degree = tonumber(SKIN:GetVariable('degree'))
 
-	local file = io.open(SKIN:MakePathAbsolute(SELF:GetOption("IncFile")), "w")
-	
-	local t = {}
-	
-	for i = 0, num-1 do
-		table.insert(t, "[" .. doSub(sectionName, i) .. "]")
-		local j = 0
-		
-		while true do
-			local opt = SELF:GetOption("Option" .. j)
-			if opt == "" then
-				break
+	local sinAmount = math.sin(math.rad(degree))
+	local cosAmount = math.cos(math.rad(degree))
+	local shapeX = 0
+	if degree > 90 then
+		shapeX = -realWidth * barCount * cosAmount
+
+		if degree > 180 then
+			shapeX = shapeX - height * sinAmount
+
+			if degree > 270 then
+				shapeX = shapeX + realWidth * barCount * cosAmount
 			end
-			table.insert(t, opt .. "=" .. doSub(SELF:GetOption("Value" .. j), i))
-			j = j + 1
 		end
 	end
-	
-	file:write(table.concat(t, "\n"))
-	file:close()
-end
 
--- does all the substitution!
-function doSub(value, i)
-	return value:gsub("%%%%", i):gsub("{.-}", parseFormula)
-end
+	local shapeY = degree ~= 0 and (-height * sinAmount + height * cosAmount) or (-height * sinAmount)
+	if degree > 90 then
+		shapeY = shapeY - height * cosAmount
 
--- sub to remove {the curly braces}, then add (parentheses), then parse it
-function parseFormula(formula)
-	return SKIN:ParseFormula("(" .. formula:sub(2, -2) .. ")")
+		if degree >= 180 then
+			shapeY =  height * sinAmount - (realWidth * barCount + width) * sinAmount
+
+			if degree > 270 then
+				shapeY =  shapeY - (realWidth * barCount + width) /2  * sinAmount
+			end
+		end
+	--else
+	--	shapeY = height * cosAmount
+	end
+
+	meterFile:write('[MeterBar]\n'
+					,'Meter=Shape\n'
+					,'X='..shapeX..'\n'
+					,'Y='..shapeY..'\n'
+					,'Group=GroupBars | GroupDynamicColors\n'
+					,'Trait=Fill Color #Color# | StrokeWidth 0\n'
+					,'DynamicVariables=1\n')
+
+for i=1,barCount do
+        local barX = realWidth * i * cosAmount
+        local barY = height + realWidth * i * sinAmount
+        local barHeight = width - height
+        if i == barCount then X1,Y1 = barX, barY end
+        meterFile:write('Shape'..(i == 1 and '' or i)..'= Rectangle '..barX..','..barY..','..width..',('..barHeight..'*[MeasureAudioSmoothed'..i..']-'..width..'),'..(width/2)..' | rotate '..degree..','..(width/2)..',('..-barHeight..'*[MeasureAudioSmoothed'..i..']+'..width..') | Extend Trait\n')
+
+    end
+    meterFile:write('Shape'..(barCount+1)..'=Line '..X1..','..Y1..','..(X1+(width+height)*sinAmount)..','..(Y1-(width+height)*cosAmount)..' | StrokeWidth 0 | StrokeColor 0,0,0,0')
+    meterFile:close()
 end
+--[MeasureAudioSmoothed'..i..']
