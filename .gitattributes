@@ -15,3 +15,11 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+*.ini  diff=astextplain
+*.INI  diff=astextplain
+
+# Fix incorrect language encoding
+*.ini linguist-language=Rainmeter
+*.INI linguist-language=Rainmeter
+*.inc linguist-language=Rainmeter
+*.INC linguist-language=Rainmeter
