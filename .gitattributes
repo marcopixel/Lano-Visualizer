@@ -19,7 +19,7 @@
 *.INI  diff=astextplain
 
 # Fix incorrect language encoding
-*.ini linguist-language=Rainmeter
-*.INI linguist-language=Rainmeter
-*.inc linguist-language=Rainmeter
-*.INC linguist-language=Rainmeter
+*.ini linguist-language=dosini
+*.INI linguist-language=dosini
+*.inc linguist-language=dosini
+*.INC linguist-language=dosini
