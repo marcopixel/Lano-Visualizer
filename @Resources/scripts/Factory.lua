@@ -33,14 +33,14 @@ function Initialize()
 				shapeY =  shapeY - (realWidth * barCount + width) /2  * sinAmount
 			end
 		end
-	--else
-	--	shapeY = height * cosAmount
+	else
+		shapeY = height * cosAmount
 	end
 
 	meterFile:write('[MeterBar]\n'
 					,'Meter=Shape\n'
-					,'X='..shapeX..'\n'
-					,'Y='..shapeY..'\n'
+					,'X='..(shapeX-realWidth)..'\n'
+					,'Y='..(shapeY-height)..'\n'
 					,'Group=GroupBars | GroupDynamicColors\n'
 					,'Trait=Fill Color #Color# | StrokeWidth 0\n'
 					,'DynamicVariables=1\n')
