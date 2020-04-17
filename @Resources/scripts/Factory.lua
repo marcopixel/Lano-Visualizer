@@ -50,7 +50,7 @@ for i=1,barCount do
         local barY = height + realWidth * i * sinAmount
         local barHeight = width - height
         if i == barCount then X1,Y1 = barX, barY end
-        meterFile:write('Shape'..(i == 1 and '' or i)..'= Rectangle '..barX..','..barY..','..width..',('..barHeight..'*[MeasureAudioSmoothed'..i..']-'..width..'),'..(width/2)..' | rotate '..degree..','..(width/2)..',('..-barHeight..'*[MeasureAudioSmoothed'..i..']+'..width..') | Extend Trait\n')
+        meterFile:write('Shape'..(i == 1 and '' or i)..'= Rectangle '..barX..','..barY..','..width..',('..barHeight..'*([MeasureAudioSmoothed'..i..']>1?1:[MeasureAudioSmoothed'..i..'])-'..width..'),'..(width/2)..' | rotate '..degree..','..(width/2)..',('..-barHeight..'*([MeasureAudioSmoothed'..i..']>1?1:[MeasureAudioSmoothed'..i..'])+'..width..') | Extend Trait\n')
 
     end
     meterFile:write('Shape'..(barCount+1)..'=Line '..X1..','..Y1..','..(X1+(width+height)*sinAmount)..','..(Y1-(width+height)*cosAmount)..' | StrokeWidth 0 | StrokeColor 0,0,0,0')
