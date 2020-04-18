@@ -47,3 +47,5 @@ Temporary Items
 .apdisk
 
 @Resources/images/coverSpotify.png
+@Resources/include/MeterBars.inc
+@Resources/variables.ini
